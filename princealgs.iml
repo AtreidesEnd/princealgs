@@ -6,6 +6,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/p1_percolation/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/p1_percolation/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/p2_queues/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/p2_queues/tests" isTestSource="true" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
