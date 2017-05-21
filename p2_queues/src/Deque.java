@@ -85,6 +85,7 @@ public class Deque<Item> implements Iterable<Item> {
             last = null;
         } else {
             last = last.prev;
+            last.next = null;
         }
         size--;
         return item;
@@ -105,22 +106,24 @@ public class Deque<Item> implements Iterable<Item> {
         }
     }
 
-    public static void main(String[] args) { // unit testing (optional)
-        Deque<Integer> testDeque = new Deque<Integer>();
+    public static void main(String[] args) {
+        Deque<Integer> deque = new Deque<Integer>();
 
-        testDeque.addLast(null);
+        deque.addLast(1);
+        StdOut.println(deque.removeFirst());
+        deque.addFirst(3);
+        StdOut.println(deque.removeFirst());
+        deque.addFirst(5);
+        StdOut.println(deque.removeLast());
+        deque.addFirst(7);
+        deque.addFirst(8);
+        StdOut.println(deque.removeFirst());
+        deque.addFirst(10);
+        deque.addFirst(11);
+        StdOut.println(deque.removeLast());
 
-        testDeque.addFirst(1);
-        testDeque.addFirst(2);
-        testDeque.addFirst(3);
-        testDeque.addFirst(4);
-        testDeque.addFirst(5);
-        testDeque.addLast(15);
-
-        for (int s : testDeque) {
+        for (int s : deque) {
             StdOut.println(s);
         }
-
-        StdOut.println("Size: " + testDeque.size());
     }
 }
