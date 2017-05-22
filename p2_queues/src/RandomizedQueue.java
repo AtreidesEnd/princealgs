@@ -57,6 +57,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             int iDequeue = StdRandom.uniform(n);
             Item deq = a[iDequeue];
             a[iDequeue] = a[--n];
+            a[n] = null; // remove loitering
             if (n <= a.length / 4) {
 //                StdOut.println("Resize down called: n = " + n + ", a.length = " + a.length + " | Resizing to : " + Math.max(a.length / 2, 2));
                 resize(Math.max(a.length / 2, 2));

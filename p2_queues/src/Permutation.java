@@ -9,11 +9,10 @@ public class Permutation {
 
     public static void main(String[] args) {
         int k = Integer.parseInt(args[0]);
-        In in = new In(args[1]); // input file
         RandomizedQueue<String> rq = new RandomizedQueue<String>();
 
-        while (!in.isEmpty()) {
-            rq.enqueue(in.readString());
+        while (!StdIn.isEmpty()) {
+            rq.enqueue(StdIn.readString());
         }
 
         for (int i = 0; i < k; i++) {
