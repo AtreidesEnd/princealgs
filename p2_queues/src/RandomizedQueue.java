@@ -41,6 +41,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public void enqueue(Item item) { // add the item
         if (item == null) throw new NullPointerException();
         if (n == a.length) {
+//            StdOut.println("Resize down called: n = " + n + ", a.length = " + a.length + " | Resizing to : " + 2*a.length);
             resize(2*a.length);
         }
         a[n++] = item;
@@ -53,11 +54,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             a[n] = null;
             return deq;
         } else {
-            int iDequeue = StdRandom.uniform(n - 1);
+            int iDequeue = StdRandom.uniform(n);
             Item deq = a[iDequeue];
             a[iDequeue] = a[--n];
             if (n <= a.length / 4) {
-                resize(Math.min(a.length / 2, 2));
+//                StdOut.println("Resize down called: n = " + n + ", a.length = " + a.length + " | Resizing to : " + Math.max(a.length / 2, 2));
+                resize(Math.max(a.length / 2, 2));
             }
             return deq;
         }
@@ -66,7 +68,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public Item sample() { // return (but do not remove) a random item
         if (isEmpty()) throw new NoSuchElementException();
         if (n == 1) { return a[0]; }
-        int rand = StdRandom.uniform(n-1);
+        int rand = StdRandom.uniform(n);
         return a[rand];
     }
 
@@ -82,7 +84,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
                 shuff[i] = i;
             }
             for (int i=0; i<n; i++) {
-                int rand = StdRandom.uniform(n-1);
+                int rand = StdRandom.uniform(i,n);
                 int swap = shuff[rand];
                 shuff[rand] = shuff[i];
                 shuff[i] = swap;
@@ -102,18 +104,29 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public static void main(String[] args) { // unit testing (optional)
         RandomizedQueue<Integer> test = new RandomizedQueue<Integer>();
 
-        test.enqueue(1);
-        test.enqueue(2);
-        test.enqueue(3);
-        test.enqueue(4);
-        test.enqueue(5);
-        test.enqueue(6);
-
-        for (int s : test) {
-            StdOut.println(s);
-            for (int y : test) {
-                StdOut.println(y);
-            }
+        for (int i=0; i<20; i++) {
+            test.enqueue(StdRandom.uniform(50));
         }
+        StdOut.println("Size: " + test.size());
+        while (!test.isEmpty()) {
+            StdOut.println(test.dequeue());
+            StdOut.println("Size: " + test.size());
+        }
+        StdOut.println(test.size());
+//        test.enqueue(3);
+//        test.dequeue();
+//        test.dequeue();
+//        test.dequeue();
+//        test.enqueue(4);
+//
+//        test.enqueue(5);
+//        test.enqueue(6);
+//
+//        for (int s : test) {
+//            StdOut.println(s);
+//            for (int y : test) {
+//                StdOut.println(y);
+//            }
+//        }
     }
 }
