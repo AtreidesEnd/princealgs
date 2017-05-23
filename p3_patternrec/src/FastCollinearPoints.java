@@ -29,11 +29,11 @@ public class FastCollinearPoints {
             boolean unique = true;
 
             while (end < points.length-1) {
-                tempSeg.add(points[0]);
+                tempSeg.add(points[i]);
                 tempSeg.add(sortedPoints[start]);
-                while (points[0].slopeTo(sortedPoints[start]) == points[0].slopeTo(sortedPoints[end])) {
-                    tempSeg.add(sortedPoints[end]);
-                    end++;
+                while ((points[i].slopeTo(sortedPoints[start]) == points[i].slopeTo(sortedPoints[end]))) {
+                    tempSeg.add(sortedPoints[end++]);
+                    if (end >= points.length) break; // if we increment past the array, we're done
                 }
                 if (tempSeg.size() >= 4) { // consider this a segment if it's 4 or bigger
                     // now we need to establish the 'maximal' version of this line
@@ -58,8 +58,8 @@ public class FastCollinearPoints {
                     }
                 } // if tempSeg isn't bigger than 4, then we start from the next point
                 tempSeg.clear();
-                start = end+1;
-                end = start+1;
+                start = end;
+               end = start+1;
             } // after the while loop, we start over for next (i)
         }
     }
