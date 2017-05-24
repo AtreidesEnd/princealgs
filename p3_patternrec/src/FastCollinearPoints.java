@@ -7,7 +7,28 @@ import java.util.Arrays;
  */
 public class FastCollinearPoints {
     private int nSeg = 0;
-    private ArrayList<LineSegment> segs = new ArrayList<>();
+    private ArrayList<PotentialSegment> segs = new ArrayList<>();
+
+    private class PotentialSegment {
+        private Point p;
+        private Point q;
+
+        public PotentialSegment(Point p, Point q) {
+            if (p == null || q == null) {
+                throw new NullPointerException("argument is null");
+            }
+            this.p = p;
+            this.q = q;
+        }
+
+        public Point getP1() {
+            return p;
+        }
+
+        public Point getP2() {
+            return q;
+        }
+    }
 
 
     public FastCollinearPoints(Point[] points) {  // finds all line segments containing 4 or more points
@@ -48,12 +69,12 @@ public class FastCollinearPoints {
                         }
                     }
                     // now we have a segment from [minPoint to maxPoint], see if it's unique
-                    for (LineSegment l : segs) {
-                        if (l.toString().equals(minPoint + " -> " + maxPoint)) unique = false;
+                    for (PotentialSegment seg : segs) {
+                        if (seg.getP1()==minPoint && seg.getP2()==maxPoint) unique = false;
                     }
 
                     if (unique) { // if unique, add to segments
-                        segs.add(new LineSegment(minPoint,maxPoint));
+                        segs.add(new PotentialSegment(minPoint,maxPoint));
                         nSeg++;
                     }
                 } // if tempSeg isn't bigger than 4, then we start from the next point
@@ -69,6 +90,10 @@ public class FastCollinearPoints {
     }
 
     public LineSegment[] segments() { // the actual line segments identified
-        return segs.toArray(new LineSegment[0]);
+        LineSegment[] tempLS = new LineSegment[nSeg];
+        for (int i = 0; i < nSeg; i++) {
+            tempLS[i] = new LineSegment(segs.get(i).getP1(),segs.get(i).getP2());
+        }
+        return tempLS;
     }
 }
