@@ -1,6 +1,7 @@
 import javax.sound.sampled.Line;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Jared Meek on 23/05/2017.
@@ -42,6 +43,8 @@ public class BruteCollinearPoints {
                 }
             }
         }
+        Arrays.sort(points);
+
 
         ArrayList<Point> tempSeg = new ArrayList<>();
         boolean unique = true;
