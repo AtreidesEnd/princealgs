@@ -1,4 +1,3 @@
-import javax.sound.sampled.Line;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -8,6 +7,7 @@ import java.util.Arrays;
 public class FastCollinearPoints {
     private int nSeg = 0;
     private ArrayList<PotentialSegment> segs = new ArrayList<>();
+    private LineSegment[] segments;
 
     private class PotentialSegment {
         private Point p;
@@ -31,30 +31,36 @@ public class FastCollinearPoints {
     }
 
 
-    public FastCollinearPoints(Point[] points) {  // finds all line segments containing 4 or more points
+    public FastCollinearPoints(Point[] points) {  // finds all line segments containing 4 or more pointsArr
         // checking for null conditions
         // there's probably a way to do this during the below loop, but for now let's just get it over with
         if (points == null ) throw new NullPointerException();
         for (int a = 0; a < points.length; a++ ) {
             if (points[a] == null) throw new NullPointerException();
+            for (int b = 1; b < points.length; b++ ) {
+                if (a != b && points[a].compareTo(points[b]) == 0) {
+                    throw new IllegalArgumentException();
+                }
+            }
         }
 
-        Point[] sortedPoints = points.clone();
+        Point[] pointsArr = points.clone();
+        Point[] sortedPoints = pointsArr.clone();
         ArrayList<Point> tempSeg = new ArrayList<>();
 
-        for (int i = 0; i<points.length; i++) {
-            Arrays.sort(sortedPoints, points[i].slopeOrder());
-            // at the end of this, points[i] will always be at array 0, and i can proceed from there
+        for (int i = 0; i<pointsArr.length; i++) {
+            Arrays.sort(sortedPoints, pointsArr[i].slopeOrder());
+            // at the end of this, pointsArr[i] will always be at array 0, and i can proceed from there
             int start = 1;
             int end = 2;
             boolean unique = true;
 
-            while (end < points.length-1) {
-                tempSeg.add(points[i]);
+            while (end < pointsArr.length-1) {
+                tempSeg.add(pointsArr[i]);
                 tempSeg.add(sortedPoints[start]);
-                while ((points[i].slopeTo(sortedPoints[start]) == points[i].slopeTo(sortedPoints[end]))) {
+                while ((pointsArr[i].slopeTo(sortedPoints[start]) == pointsArr[i].slopeTo(sortedPoints[end]))) {
                     tempSeg.add(sortedPoints[end++]);
-                    if (end >= points.length) break; // if we increment past the array, we're done
+                    if (end >= pointsArr.length) break; // if we increment past the array, we're done
                 }
                 if (tempSeg.size() >= 4) { // consider this a segment if it's 4 or bigger
                     // now we need to establish the 'maximal' version of this line
@@ -87,6 +93,11 @@ public class FastCollinearPoints {
                 end = start+1;
             } // after the while loop, we start over for next (i)
         }
+        segments = new LineSegment[nSeg];
+        for (int i = 0; i < nSeg; i++) {
+            segments[i] = new LineSegment(segs.get(i).getP1(),segs.get(i).getP2());
+        }
+
     }
 
     public int numberOfSegments() { // number of line segments
@@ -94,10 +105,6 @@ public class FastCollinearPoints {
     }
 
     public LineSegment[] segments() { // the actual line segments identified
-        LineSegment[] tempLS = new LineSegment[nSeg];
-        for (int i = 0; i < nSeg; i++) {
-            tempLS[i] = new LineSegment(segs.get(i).getP1(),segs.get(i).getP2());
-        }
-        return tempLS;
+        return segments;
     }
 }

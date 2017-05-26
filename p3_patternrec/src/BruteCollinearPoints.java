@@ -1,5 +1,3 @@
-import javax.sound.sampled.Line;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -9,6 +7,7 @@ import java.util.Arrays;
 public class BruteCollinearPoints {
     private int nSeg = 0;
     private ArrayList<PotentialSegment> segs = new ArrayList<>();
+    private LineSegment[] segments;
 
     private class PotentialSegment {
         private Point p;
@@ -43,19 +42,20 @@ public class BruteCollinearPoints {
                 }
             }
         }
-        Arrays.sort(points); // this makes this data type immutable
 
+        Point[] pointsArr = points.clone(); // this makes this data type immutable
+        Arrays.sort(pointsArr);
 
         ArrayList<Point> tempSeg = new ArrayList<>();
         boolean unique = true;
-        for (int i = 0; i < points.length-3; i++ ) {
-            for (int j = i+1; j < points.length-2; j++ ) {
-                for (int k = j+1; k < points.length-1; k++ ) {
-                    for (int l = k+1; l < points.length; l++ ) {
-                        if (points[i].slopeTo(points[j]) == points[i].slopeTo(points[k]) &&
-                                points[i].slopeTo(points[j]) == points[i].slopeTo(points[l]) ) {
-                            tempSeg.add(points[i]); tempSeg.add(points[j]);
-                            tempSeg.add(points[k]); tempSeg.add(points[l]);
+        for (int i = 0; i < pointsArr.length-3; i++ ) {
+            for (int j = i+1; j < pointsArr.length-2; j++ ) {
+                for (int k = j+1; k < pointsArr.length-1; k++ ) {
+                    for (int l = k+1; l < pointsArr.length; l++ ) {
+                        if (pointsArr[i].slopeTo(pointsArr[j]) == pointsArr[i].slopeTo(pointsArr[k]) &&
+                                pointsArr[i].slopeTo(pointsArr[j]) == pointsArr[i].slopeTo(pointsArr[l]) ) {
+                            tempSeg.add(pointsArr[i]); tempSeg.add(pointsArr[j]);
+                            tempSeg.add(pointsArr[k]); tempSeg.add(pointsArr[l]);
                             Point minPoint = tempSeg.get(0);
                             Point maxPoint = tempSeg.get(0);
 
@@ -77,9 +77,14 @@ public class BruteCollinearPoints {
                             }
                         }
                         tempSeg.clear(); // if the 4 don't match, try again with the next 4!
+                        unique = true;
                     }
                 }
             }
+        }
+        segments = new LineSegment[nSeg];
+        for (int i = 0; i < nSeg; i++) {
+            segments[i] = new LineSegment(segs.get(i).getP1(),segs.get(i).getP2());
         }
     }
 
@@ -88,10 +93,6 @@ public class BruteCollinearPoints {
     }
 
     public LineSegment[] segments() { // the actual line segments identified
-        LineSegment[] tempLS = new LineSegment[nSeg];
-        for (int i = 0; i < nSeg; i++) {
-            tempLS[i] = new LineSegment(segs.get(i).getP1(),segs.get(i).getP2());
-        }
-        return tempLS;
+        return segments;
     }
 }
