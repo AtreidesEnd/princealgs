@@ -43,7 +43,7 @@ public class BruteCollinearPoints {
                 }
             }
         }
-        Arrays.sort(points);
+        Arrays.sort(points); // this makes this data type immutable
 
 
         ArrayList<Point> tempSeg = new ArrayList<>();

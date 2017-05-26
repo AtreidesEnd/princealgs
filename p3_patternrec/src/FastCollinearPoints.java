@@ -68,9 +68,12 @@ public class FastCollinearPoints {
                             maxPoint = p;
                         }
                     }
+
                     // now we have a segment from [minPoint to maxPoint], see if it's unique
                     for (PotentialSegment seg : segs) {
-                        if (seg.getP1()==minPoint && seg.getP2()==maxPoint) unique = false;
+                        if (seg.getP1()==minPoint && seg.getP2()==maxPoint) {
+                            unique = false;
+                        }
                     }
 
                     if (unique) { // if unique, add to segments
@@ -79,8 +82,9 @@ public class FastCollinearPoints {
                     }
                 } // if tempSeg isn't bigger than 4, then we start from the next point
                 tempSeg.clear();
+                unique = true;
                 start = end;
-               end = start+1;
+                end = start+1;
             } // after the while loop, we start over for next (i)
         }
     }
