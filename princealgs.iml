@@ -10,6 +10,9 @@
       <sourceFolder url="file://$MODULE_DIR$/p2_queues/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/p3_patternrec/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/p3_patternrec/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/p4_puzzle/res" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/p4_puzzle/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/p4_puzzle/tests" isTestSource="true" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
