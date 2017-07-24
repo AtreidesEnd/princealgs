@@ -1,7 +1,11 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
-import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.SET;
+import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
+
+import java.awt.*;
 
 /**
  * Created by jmeek on 24/07/2017.
@@ -59,9 +63,9 @@ public class KdTree {
         if (x.p.equals(p)) return x;
 
         if ((level % 2 == 0 && p.x() < x.p.x()) || (level % 2 == 1 && p.y() < x.p.y())) {
-            x.lb = insert(x.lb, x, p, ++level);
+            x.lb = insert(x.lb, x, p, level+1);
         } else {
-            x.rt = insert(x.rt, x, p, ++level);
+            x.rt = insert(x.rt, x, p, level+1);
         }
         return x;
     }
@@ -74,36 +78,72 @@ public class KdTree {
         if (x == null) return false;
         if (x.p.equals(p)) return true;
         if ((level % 2 == 0 && p.x() < x.p.x()) || (level % 2 == 1 && p.y() < x.p.y())) {
-            return contains(x.lb, p, ++level);
+            return contains(x.lb, p, level+1);
         } else {
-            return contains(x.rt, p, ++level);
+            return contains(x.rt, p, level+1);
         }
     }
-/*
+
     public void draw() { // draw all points to standard draw
-        for (Point2D p : set) {
-            p.draw();
+        draw(root,0);
+    }
+
+    private void draw(Node x, int level) {
+        int lvl = level % 2;
+
+        StdDraw.setPenRadius(.001);
+        if (lvl == 0) {
+            StdDraw.setPenColor(StdDraw.RED);
+            StdDraw.line(x.p.x(),x.rect.ymin(),x.p.x(),x.rect.ymax());
+        } else {
+            StdDraw.setPenColor(StdDraw.BLUE);
+            StdDraw.line(x.rect.xmin(),x.p.y(),x.rect.xmax(),x.p.y());
         }
+
+        StdDraw.setPenRadius(.005);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        x.p.draw();
+
+        if (x.lb != null) draw(x.lb, level+1);
+        if (x.rt != null) draw(x.rt, level+1);
+
     }
 
     public Iterable<Point2D> range(RectHV rect) { // all points that are inside the rectangle
-        SET<Point2D> newSet = new SET<Point2D>();
-        for (Point2D p : set) {
-            if (rect.contains(p)) newSet.add(p);
-        }
-        return newSet;
+        Stack<Point2D> st = new Stack<Point2D>();
+        range(root, rect, st);
+        return st;
+    }
+
+    private void range(Node x, RectHV r, Stack<Point2D> st) {
+        if (x == null) return;
+        if (r.contains(x.p)) st.push(x.p);
+        if (x.lb != null && x.lb.rect.intersects(r)) range(x.lb, r, st);
+        if (x.rt != null && x.rt.rect.intersects(r)) range(x.rt, r, st);
     }
 
     public Point2D nearest(Point2D p) { // a nearest neighbor in the set to point p; null if the set is empty
-        Point2D champ = null;
-        for (Point2D pt : set) {
-            if (champ == null || p.distanceTo(pt) < p.distanceTo(champ)) {
-                champ = pt;
+        if (isEmpty()) return null;
+        return nearest(p,null,root,0);
+    }
+
+    private Point2D nearest(Point2D p, Point2D champ, Node x, int level) {
+        if (champ == null || x.p.distanceTo(p) < champ.distanceTo(p)) champ = x.p;
+
+        if ((level % 2 == 0 && p.x() < x.p.x()) || (level % 2 == 1 && p.y() < x.p.y())) {
+            champ = nearest(p, champ, x.lb,level+1); // go left/down
+            if (x.rt != null && (x.rt.rect.contains(p) || x.rt.rect.distanceTo(p) < champ.distanceTo(p))) {
+                champ = nearest(p, champ, x.rt,level+1); // if still valid, go right also
+            }
+        } else {
+            champ = nearest(p, champ, x.rt,level+1); // go right/up
+            if (x.lb != null && (x.lb.rect.contains(p) || x.lb.rect.distanceTo(p) < champ.distanceTo(p))) {
+                champ = nearest(p, champ, x.lb,level+1); // if still valid, go left also
             }
         }
+
         return champ;
     }
-    */
 
 
     public static void main(String[] args) { // unit testing of the methods (optional)
