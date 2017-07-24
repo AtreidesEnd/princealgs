@@ -24,7 +24,7 @@ public class PointSET {
     }
 
     public void insert(Point2D p) { // add the point to the set (if it is not already in the set)
-        set.add(p);
+        if (!set.contains(p)) set.add(p);
     }
 
     public boolean contains(Point2D p) { // does the set contain point p?
