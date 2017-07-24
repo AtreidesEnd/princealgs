@@ -131,12 +131,12 @@ public class KdTree {
         if (champ == null || x.p.distanceTo(p) < champ.distanceTo(p)) champ = x.p;
 
         if ((level % 2 == 0 && p.x() < x.p.x()) || (level % 2 == 1 && p.y() < x.p.y())) {
-            champ = nearest(p, champ, x.lb,level+1); // go left/down
+            if (x.lb != null) champ = nearest(p, champ, x.lb,level+1); // go left/down
             if (x.rt != null && (x.rt.rect.contains(p) || x.rt.rect.distanceTo(p) < champ.distanceTo(p))) {
                 champ = nearest(p, champ, x.rt,level+1); // if still valid, go right also
             }
         } else {
-            champ = nearest(p, champ, x.rt,level+1); // go right/up
+            if (x.rt != null) champ = nearest(p, champ, x.rt,level+1); // go right/up
             if (x.lb != null && (x.lb.rect.contains(p) || x.lb.rect.distanceTo(p) < champ.distanceTo(p))) {
                 champ = nearest(p, champ, x.lb,level+1); // if still valid, go left also
             }
@@ -155,6 +155,9 @@ public class KdTree {
         tree.insert(new Point2D(.4,.7));
         tree.insert(new Point2D(.9,.6));
         StdOut.println(tree.size());
+
+        StdOut.println(tree.contains(new Point2D(.9,.6)));
+        StdOut.println(tree.nearest(new Point2D(.95,.45)));
 
     }
 }
