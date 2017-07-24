@@ -57,7 +57,10 @@ public class KdTree {
             }
         }
 
-        if (x.p.equals(p)) return x;
+        if (x.p.equals(p)) {
+            size--;
+            return x;
+        }
 
         if ((level % 2 == 0 && p.x() < x.p.x()) || (level % 2 == 1 && p.y() < x.p.y())) {
             x.lb = insert(x.lb, x, p, level+1);
